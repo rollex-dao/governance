@@ -10,7 +10,7 @@ import {BUIDLEREVM_CHAINID, COVERAGE_CHAINID} from './helpers/buidler-constants'
 
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-etherscan';
+import '@nomicfoundation/hardhat-verify';
 import 'hardhat-gas-reporter';
 import 'hardhat-typechain';
 import 'solidity-coverage';
@@ -67,7 +67,19 @@ const buidlerConfig: HardhatUserConfig = {
     target: 'ethers-v5',
   },
   etherscan: {
-    apiKey: ETHERSCAN_KEY,
+    apiKey: {
+      main: 'abc', // Set to an empty string or some placeholder
+    },
+    customChains: [
+      {
+        network: 'main',
+        chainId: 570,
+        urls: {
+          apiURL: 'https://explorer.rollux.com/api',
+          browserURL: 'https://explorer.rollux.com/',
+        },
+      },
+    ],
   },
   mocha: {
     timeout: 0,
