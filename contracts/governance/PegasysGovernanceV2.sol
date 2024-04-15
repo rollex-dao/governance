@@ -35,9 +35,8 @@ contract PegasysGovernanceV2 is Ownable, IPegasysGovernanceV2 {
 
   address private _guardian;
 
-  bytes32 public constant DOMAIN_TYPEHASH = keccak256(
-    'EIP712Domain(string name,uint256 chainId,address verifyingContract)'
-  );
+  bytes32 public constant DOMAIN_TYPEHASH =
+    keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
   bytes32 public constant VOTE_EMITTED_TYPEHASH = keccak256('VoteEmitted(uint256 id,bool support)');
   string public constant NAME = 'Pegasys Governance v2';
 
@@ -357,12 +356,9 @@ contract PegasysGovernanceV2 is Ownable, IPegasysGovernanceV2 {
    * @param proposalId id of the proposal to get
    * @return the proposal as ProposalWithoutVotes memory object
    **/
-  function getProposalById(uint256 proposalId)
-    external
-    view
-    override
-    returns (ProposalWithoutVotes memory)
-  {
+  function getProposalById(
+    uint256 proposalId
+  ) external view override returns (ProposalWithoutVotes memory) {
     Proposal storage proposal = _proposals[proposalId];
     ProposalWithoutVotes memory proposalWithoutVotes = ProposalWithoutVotes({
       id: proposal.id,
@@ -394,12 +390,10 @@ contract PegasysGovernanceV2 is Ownable, IPegasysGovernanceV2 {
    * @param voter address of the voter
    * @return The associated Vote memory object
    **/
-  function getVoteOnProposal(uint256 proposalId, address voter)
-    external
-    view
-    override
-    returns (Vote memory)
-  {
+  function getVoteOnProposal(
+    uint256 proposalId,
+    address voter
+  ) external view override returns (Vote memory) {
     return _proposals[proposalId].votes[voter];
   }
 
@@ -448,11 +442,7 @@ contract PegasysGovernanceV2 is Ownable, IPegasysGovernanceV2 {
     executor.queueTransaction(target, value, signature, callData, executionTime, withDelegatecall);
   }
 
-  function _submitVote(
-    address voter,
-    uint256 proposalId,
-    bool support
-  ) internal {
+  function _submitVote(address voter, uint256 proposalId, bool support) internal {
     require(getProposalState(proposalId) == ProposalState.Active, 'VOTING_CLOSED');
     Proposal storage proposal = _proposals[proposalId];
     Vote storage vote = proposal.votes[voter];

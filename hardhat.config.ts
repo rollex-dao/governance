@@ -1,12 +1,12 @@
 import path from 'path';
 import fs from 'fs';
-import {HardhatUserConfig} from 'hardhat/config';
+import { HardhatUserConfig } from 'hardhat/config';
 // @ts-ignore
-import {accounts} from './test-wallets.js';
-import {eEthereumNetwork} from './helpers/types';
+import { accounts } from './test-wallets.js';
+import { eEthereumNetwork } from './helpers/types';
 import dotenv from 'dotenv';
 
-import {BUIDLEREVM_CHAINID, COVERAGE_CHAINID} from './helpers/buidler-constants';
+import { BUIDLEREVM_CHAINID, COVERAGE_CHAINID } from './helpers/buidler-constants';
 
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
@@ -42,21 +42,21 @@ const buidlerConfig: HardhatUserConfig = {
       {
         version: '0.7.5',
         settings: {
-          optimizer: {enabled: true, runs: 200},
+          optimizer: { enabled: true, runs: 200 },
           evmVersion: 'istanbul',
         },
       },
       {
         version: '0.6.10',
         settings: {
-          optimizer: {enabled: true, runs: 200},
+          optimizer: { enabled: true, runs: 200 },
           evmVersion: 'istanbul',
         },
       },
       {
         version: '0.6.12',
         settings: {
-          optimizer: {enabled: true, runs: 200},
+          optimizer: { enabled: true, runs: 200 },
           evmVersion: 'istanbul',
         },
       },
@@ -84,7 +84,7 @@ const buidlerConfig: HardhatUserConfig = {
   mocha: {
     timeout: 0,
   },
-  defaultNetwork: 'hardhat',
+  defaultNetwork: 'main',
   networks: {
     main: {
       chainId: 570,
@@ -99,7 +99,7 @@ const buidlerConfig: HardhatUserConfig = {
       chainId: BUIDLEREVM_CHAINID,
       throwOnTransactionFailures: true,
       throwOnCallFailures: true,
-      accounts: accounts.map(({secretKey, balance}: {secretKey: string; balance: string}) => ({
+      accounts: accounts.map(({ secretKey, balance }: { secretKey: string; balance: string }) => ({
         privateKey: secretKey,
         balance,
       })),
