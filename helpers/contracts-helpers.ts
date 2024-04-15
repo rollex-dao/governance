@@ -1,8 +1,8 @@
-import {Contract, Signer, utils} from 'ethers';
-import {getDb, DRE, waitForTx} from './misc-utils';
-import {tEthereumAddress, eContractid} from './types';
-import {Artifact} from 'hardhat/types';
-import {verifyContract} from './etherscan-verification';
+import { Contract, Signer, utils } from 'ethers';
+import { getDb, DRE, waitForTx } from './misc-utils';
+import { tEthereumAddress, eContractid } from './types';
+import { Artifact } from 'hardhat/types';
+import { verifyContract } from './etherscan-verification';
 
 export const registerContractInJsonDb = async (contractId: string, contractInstance: Contract) => {
   const currentNetwork = DRE.network.name;
@@ -50,9 +50,9 @@ export const deployContract = async <ContractType extends Contract>(
   contractName: string,
   args: any[]
 ): Promise<ContractType> => {
-  const contract = (await (await DRE.ethers.getContractFactory(contractName)).deploy(
-    ...args
-  )) as ContractType;
+  const contract = (await (
+    await DRE.ethers.getContractFactory(contractName)
+  ).deploy(...args)) as ContractType;
   await waitForTx(contract.deployTransaction);
   await registerContractInJsonDb(<eContractid>contractName, contract);
   return contract;
@@ -67,9 +67,7 @@ export const withSaveAndVerify = async <ContractType extends Contract>(
 ): Promise<ContractType> => {
   await waitForTx(instance.deployTransaction);
   await registerContractInJsonDb(customId || id, instance);
-  if (verify) {
-    await verifyContract(id, instance.address, args);
-  }
+  await verifyContract(id, instance.address, args);
   return instance;
 };
 

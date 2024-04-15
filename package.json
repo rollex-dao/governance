@@ -9,6 +9,7 @@
   "scripts": {
     "run-env": "npm i && tail -f /dev/null",
     "hardhat": "hardhat",
+    "hardhat-main": "hardhat --network main",
     "compile": "SKIP_LOAD=true hardhat compile",
     "compile:force": "npm run compile -- --force",
     "compile:force:quiet": "npm run compile:force -- --quiet",
@@ -17,7 +18,7 @@
     "dev:prettier": "prettier --write .",
     "ci:test": "npm run compile:force:quiet && npm run test",
     "ci:clean": "rm -rf ./artifacts ./cache ./types ./coverage*",
-    "migrate:dev": "npm run compile:force:quiet && hardhat migrate:dev",
+    "migrate:dev": "npm run compile:force:quiet && hardhat migrate:dev --verify",
     "migrate:main": "npm run compile:force:quiet && hardhat migrate:main",
     "types-gen": "hardhat typechain",
     "prepublishOnly": "npm run compile"
@@ -26,9 +27,9 @@
     "@aave/aave-token": "^1.0.4"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-verify": "^2.0.4",
     "@nomiclabs/buidler-waffle": "2.0.0",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
-    "@nomicfoundation/hardhat-verify": "^2.0.4",
     "@nomiclabs/hardhat-waffle": "^2.0.0",
     "@openzeppelin/contracts": "3.1.0",
     "@typechain/ethers-v4": "1.0.0",
