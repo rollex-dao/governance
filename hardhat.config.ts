@@ -83,7 +83,7 @@ const buidlerConfig: HardhatUserConfig = {
   mocha: {
     timeout: 0,
   },
-  defaultNetwork: 'main',
+  defaultNetwork: 'hardhat',
   networks: {
     main: {
       chainId: 570,
