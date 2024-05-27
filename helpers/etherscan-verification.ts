@@ -1,8 +1,8 @@
-import {exit} from 'process';
+import { exit } from 'process';
 import fs from 'fs';
 import globby from 'globby';
-import {file} from 'tmp-promise';
-import {DRE} from './misc-utils';
+import { file } from 'tmp-promise';
+import { DRE } from './misc-utils';
 
 const listSolidityFiles = (dir: string) => globby(`${dir}/**/*.sol`);
 
@@ -37,13 +37,14 @@ export const verifyContract = async (
 ) => {
   const currentNetwork = DRE.network.name;
 
-  if (!process.env.ETHERSCAN_KEY) {
-    throw Error('Missing process.env.ETHERSCAN_KEY.');
-  }
+  // if (!process.env.ETHERSCAN_KEY) {
+  //   throw Error('Missing process.env.ETHERSCAN_KEY.');
+  // }
   if (!SUPPORTED_ETHERSCAN_NETWORKS.includes(currentNetwork)) {
-    throw Error(
-      `Current network ${currentNetwork} not supported. Please change to one of the next networks: ${SUPPORTED_ETHERSCAN_NETWORKS.toString()}`
-    );
+    // throw Error(
+    //   `Current network ${currentNetwork} not supported. Please change to one of the next networks: ${SUPPORTED_ETHERSCAN_NETWORKS.toString()}`
+    // );
+    return;
   }
   const etherscanPath = await getEtherscanPath(contractName);
 
@@ -54,7 +55,7 @@ export const verifyContract = async (
     const msDelay = 3000;
     const times = 15;
     // Write a temporal file to host complex parameters for buidler-etherscan https://github.com/nomiclabs/buidler/tree/development/packages/buidler-etherscan#complex-arguments
-    const {fd, path, cleanup} = await file({
+    const { fd, path, cleanup } = await file({
       prefix: 'verify-params-',
       postfix: '.js',
     });
@@ -108,14 +109,11 @@ export const runTaskWithRetry = async (
 
 export const checkVerification = () => {
   const currentNetwork = DRE.network.name;
-  if (!process.env.ETHERSCAN_KEY) {
-    console.error('Missing process.env.ETHERSCAN_KEY.');
-    exit(3);
-  }
+  // if (!process.env.ETHERSCAN_KEY) {
+  //   console.error('Missing process.env.ETHERSCAN_KEY.');
+  //   exit(3);
+  // }
   if (!SUPPORTED_ETHERSCAN_NETWORKS.includes(currentNetwork)) {
-    console.error(
-      `Current network ${currentNetwork} not supported. Please change to one of the next networks: ${SUPPORTED_ETHERSCAN_NETWORKS.toString()}`
-    );
-    exit(5);
+    return;
   }
 };

@@ -3,7 +3,7 @@ import fs from 'fs';
 import { HardhatUserConfig } from 'hardhat/config';
 // @ts-ignore
 import { accounts } from './test-wallets.js';
-import { eEthereumNetwork } from './helpers/types';
+// import { eEthereumNetwork } from './helpers/types';
 import dotenv from 'dotenv';
 
 import { BUIDLEREVM_CHAINID, COVERAGE_CHAINID } from './helpers/buidler-constants';
@@ -20,7 +20,6 @@ dotenv.config();
 const SKIP_LOAD = process.env.SKIP_LOAD === 'true';
 const DEFAULT_BLOCK_GAS_LIMIT = 12450000;
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '';
-const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY || '';
 
 // Prevent to load scripts before compilation and typechain
 if (!SKIP_LOAD) {
@@ -84,7 +83,7 @@ const buidlerConfig: HardhatUserConfig = {
   mocha: {
     timeout: 0,
   },
-  defaultNetwork: 'main',
+  defaultNetwork: 'hardhat',
   networks: {
     main: {
       chainId: 570,

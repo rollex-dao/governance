@@ -2,9 +2,9 @@ import BigNumber from 'bignumber.js';
 import BN = require('bn.js');
 import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
-import {WAD} from './constants';
-import {Wallet, ContractTransaction} from 'ethers';
-import {HardhatRuntimeEnvironment} from 'hardhat/types';
+import { WAD } from './constants';
+import { Wallet, ContractTransaction } from 'ethers';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
 export const toWad = (value: string | number) => new BigNumber(value).times(WAD).toFixed();
 
@@ -69,10 +69,10 @@ export const increaseTime = async (secondsToIncrease: number) => {
 
 export const waitForTx = async (tx: ContractTransaction) => await tx.wait();
 
-export const filterMapBy = (raw: {[key: string]: any}, fn: (key: string) => boolean) =>
+export const filterMapBy = (raw: { [key: string]: any }, fn: (key: string) => boolean) =>
   Object.keys(raw)
     .filter(fn)
-    .reduce<{[key: string]: any}>((obj, key) => {
+    .reduce<{ [key: string]: any }>((obj, key) => {
       obj[key] = raw[key];
       return obj;
     }, {});

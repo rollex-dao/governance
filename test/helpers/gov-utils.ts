@@ -1,12 +1,12 @@
-import {BigNumber, Signer, BigNumberish} from 'ethers';
-import {SignerWithAddress, TestEnv} from './make-suite';
-import {latestBlock, DRE} from '../../helpers/misc-utils';
-import {expect, use} from 'chai';
-import {Test} from 'mocha';
-import {getFirstSigner} from '../../helpers/contracts-getters';
-import {SelfdestructTransferFactory} from '../../types';
-import {PegasysTokenV2} from '../../types/PegasysTokenV2';
-import {tEthereumAddress} from '../../helpers/types';
+import { BigNumber, Signer, BigNumberish } from 'ethers';
+import { SignerWithAddress, TestEnv } from './make-suite';
+import { latestBlock, DRE } from '../../helpers/misc-utils';
+import { expect, use } from 'chai';
+import { Test } from 'mocha';
+import { getFirstSigner } from '../../helpers/contracts-getters';
+import { SelfdestructTransferFactory } from '../../types';
+import { AaveTokenV2 } from '../../types/AaveTokenV2';
+import { tEthereumAddress } from '../../helpers/types';
 
 export const emptyBalances = async (users: SignerWithAddress[], testEnv: TestEnv) => {
   for (let i = 0; i < users.length; i++) {
@@ -24,7 +24,7 @@ export const setBalance = async (user: SignerWithAddress, amount: BigNumber, tes
 export const setTokenBalance = async (
   user: SignerWithAddress,
   amount: BigNumber,
-  token: PegasysTokenV2,
+  token: AaveTokenV2,
   testEnv: TestEnv
 ) => {
   // emptying
@@ -94,7 +94,7 @@ export const calculateUserTotalPowers = async (
   tokens: tEthereumAddress[],
   testEnv: TestEnv
 ) => {
-  const {govHelper} = testEnv;
+  const { govHelper } = testEnv;
   const userPowers = await govHelper.connect(user.signer).getTokensPower(user.address, tokens);
   return userPowers.reduce(
     (acum, token) => {
