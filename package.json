@@ -19,7 +19,8 @@
     "ci:test": "npm run compile:force:quiet && npm run test",
     "ci:clean": "rm -rf ./artifacts ./cache ./types ./coverage*",
     "migrate:dev": "npm run compile:force:quiet && hardhat migrate:dev --verify",
-    "migrate:main": "npm run compile:force:quiet && hardhat migrate:main",
+    "migrate:main": "npm run compile:force:quiet && hardhat migrate:dev --network main",
+    "deploy:main": "npm run compile:force:quiet && hardhat deploy:main --network main",
     "types-gen": "hardhat typechain",
     "prepublishOnly": "npm run compile"
   },

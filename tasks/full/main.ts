@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
 import { task } from 'hardhat/config';
-import { getFirstSigner } from '../../helpers/contracts-getters';
+// import { getFirstSigner } from '../../helpers/contracts-getters';
 import { DRE } from '../../helpers/misc-utils';
 
 const ONE_DAY = BigNumber.from('60').mul('60').mul('24');
@@ -13,34 +13,24 @@ const propositionThreshold = '125'; // 1.25%
 const voteDifferential = '650'; // 6.5%
 const minimumQuorum = '650'; // 6.5%
 
-task(`migrate:dev`, `Deploy governance for tests and development purposes`)
+const PSYS = '';
+const STKPSYS = '';
+
+task(`deploy:main`, `Deploy governance contracts`)
   .addFlag('verify')
   .addFlag('silent')
   .addParam('votingDelay', '', '15')
   .addParam('executorAsOwner', '', 'true') // had issue with other types than string
   .setAction(async ({ votingDelay, executorAsOwner, verify, silent }, _DRE) => {
     await _DRE.run('set-DRE');
-    const [adminSigner, tokenMinterSigner] = await _DRE.ethers.getSigners();
+    const [adminSigner] = await _DRE.ethers.getSigners();
 
     const admin = await adminSigner.getAddress();
-    const tokenMinter = await tokenMinterSigner.getAddress();
-
-    // Deploy mocked PSYS v2
-    const token = await DRE.run('deploy:mocked-psys', {
-      minter: tokenMinter,
-      verify,
-    });
-
-    // Deploy mocked STK PSYS v2
-    const stkToken = await DRE.run('deploy:mocked-stk-psys', {
-      minter: tokenMinter,
-      verify,
-    });
 
     // Deploy strategy
     const strategy = await DRE.run('deploy:strategy', {
-      psys: token.address,
-      stkPSYS: stkToken.address,
+      psys: PSYS,
+      stkPSYS: STKPSYS,
       verify,
     });
     console.log('Strategy address:', strategy.address);

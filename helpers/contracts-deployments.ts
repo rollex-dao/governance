@@ -1,18 +1,18 @@
-import {tEthereumAddress, eContractid} from './types';
-import {getPegasysV2Mocked, getFirstSigner} from './contracts-getters';
+import { tEthereumAddress, eContractid } from './types';
+import { getPegasysV2Mocked, getFirstSigner } from './contracts-getters';
 import {
   PegasysGovernanceV2Factory,
   ExecutorFactory,
   GovernanceStrategyFactory,
   InitializableAdminUpgradeabilityProxyFactory,
   PegasysTokenV1MockFactory,
-  AaveTokenV2Factory as PegasysTokenV2Factory,
+  AaveTokenV2Factory,
   FlashAttacksFactory,
   GovernanceV2HelperFactory,
 } from '../types';
-import {withSaveAndVerify} from './contracts-helpers';
-import {waitForTx} from './misc-utils';
-import {Interface} from 'ethers/lib/utils';
+import { withSaveAndVerify } from './contracts-helpers';
+import { waitForTx } from './misc-utils';
+import { Interface } from 'ethers/lib/utils';
 
 export const deployGovernanceV2Helper = async (verify?: boolean) => {
   return withSaveAndVerify(
@@ -100,7 +100,7 @@ export const deployProxy = async (customId: string, verify?: boolean) =>
   );
 
 export const deployMockedPegasysV2 = async (minter: tEthereumAddress, verify?: boolean) => {
-  const proxy = await deployProxy(eContractid.PegasysTokenV2Mock);
+  const proxy = await deployProxy(eContractid.AaveTokenV2Mock);
 
   const implementationV1 = await withSaveAndVerify(
     await new PegasysTokenV1MockFactory(await getFirstSigner()).deploy(),
@@ -110,15 +110,16 @@ export const deployMockedPegasysV2 = async (minter: tEthereumAddress, verify?: b
     eContractid.PegasysTokenV1MockImpl
   );
   const implementationV2 = await withSaveAndVerify(
-    await new PegasysTokenV2Factory(await getFirstSigner()).deploy(),
-    eContractid.PegasysTokenV2,
+    await new AaveTokenV2Factory(await getFirstSigner()).deploy(),
+    eContractid.AaveTokenV2,
     [],
     verify,
-    eContractid.PegasysTokenV2MockImpl
+    eContractid.AaveTokenV2MockImpl
   );
-  const encodedPayload = new Interface([
-    'function initialize(address minter)',
-  ]).encodeFunctionData('initialize', [minter]);
+  const encodedPayload = new Interface(['function initialize(address minter)']).encodeFunctionData(
+    'initialize',
+    [minter]
+  );
   await waitForTx(
     await proxy.functions['initialize(address,address,bytes)'](
       implementationV1.address,
@@ -142,15 +143,16 @@ export const deployMockedStkPSYSV2 = async (minter: tEthereumAddress, verify?: b
     eContractid.StkPSYSTokenV1MockImpl
   );
   const implementationV2 = await withSaveAndVerify(
-    await new PegasysTokenV2Factory(await getFirstSigner()).deploy(),
+    await new AaveTokenV2Factory(await getFirstSigner()).deploy(),
     eContractid.StkPSYSTokenV2,
     [],
     verify,
     eContractid.StkPSYSTokenV2MockImpl
   );
-  const encodedPayload = new Interface([
-    'function initialize(address minter)',
-  ]).encodeFunctionData('initialize', [minter]);
+  const encodedPayload = new Interface(['function initialize(address minter)']).encodeFunctionData(
+    'initialize',
+    [minter]
+  );
   await waitForTx(
     await proxy.functions['initialize(address,address,bytes)'](
       implementationV1.address,
