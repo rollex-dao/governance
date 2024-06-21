@@ -1,12 +1,12 @@
-import { expect, use } from 'chai';
-import { solidity } from 'ethereum-waffle';
-import { BigNumber } from 'ethers';
-import { MAX_UINT_AMOUNT } from '../helpers/constants';
-import { DRE } from '../helpers/misc-utils';
-import { buildDelegateByTypeParams, buildDelegateParams } from './helpers/delegation';
-import { calculateUserTotalPowers, setTokenBalance } from './helpers/gov-utils';
-import { deployGovernance, makeSuite, TestEnv } from './helpers/make-suite';
-import { getSignatureFromTypedData } from './helpers/permit';
+import {expect, use} from 'chai';
+import {solidity} from 'ethereum-waffle';
+import {BigNumber} from 'ethers';
+import {MAX_UINT_AMOUNT} from '../helpers/constants';
+import {DRE} from '../helpers/misc-utils';
+import {buildDelegateByTypeParams, buildDelegateParams} from './helpers/delegation';
+import {calculateUserTotalPowers, setTokenBalance} from './helpers/gov-utils';
+import {deployGovernance, makeSuite, TestEnv} from './helpers/make-suite';
+import {getSignatureFromTypedData} from './helpers/permit';
 
 enum DelegationType {
   VOTING_POWER = 0,
@@ -15,80 +15,80 @@ enum DelegationType {
 
 use(solidity);
 
-makeSuite('Aave Governance V2 Helpers tests', deployGovernance, (testEnv: TestEnv) => {
+makeSuite('Rex Governance V2 Helpers tests', deployGovernance, (testEnv: TestEnv) => {
   const expiry = MAX_UINT_AMOUNT;
-  const USER1_AAVE_BALANCE = BigNumber.from(1000);
-  const USER1_STKAAVE_BALANCE = BigNumber.from(2000);
-  const USER2_AAVE_BALANCE = BigNumber.from(3000);
-  const USER2_STKAAVE_BALANCE = BigNumber.from(4000);
+  const USER1_REX_BALANCE = BigNumber.from(1000);
+  const USER1_STKREX_BALANCE = BigNumber.from(2000);
+  const USER2_REX_BALANCE = BigNumber.from(3000);
+  const USER2_STKREX_BALANCE = BigNumber.from(4000);
 
   beforeEach(async () => {
     const {
       users: [user1, user2],
     } = testEnv;
 
-    await setTokenBalance(user1, USER1_AAVE_BALANCE, testEnv.aave, testEnv);
-    await setTokenBalance(user1, USER1_STKAAVE_BALANCE, testEnv.stkAave, testEnv);
+    await setTokenBalance(user1, USER1_REX_BALANCE, testEnv.rex, testEnv);
+    await setTokenBalance(user1, USER1_STKREX_BALANCE, testEnv.stkRex, testEnv);
 
-    await setTokenBalance(user2, USER2_AAVE_BALANCE, testEnv.aave, testEnv);
-    await setTokenBalance(user2, USER2_STKAAVE_BALANCE, testEnv.stkAave, testEnv);
+    await setTokenBalance(user2, USER2_REX_BALANCE, testEnv.rex, testEnv);
+    await setTokenBalance(user2, USER2_STKREX_BALANCE, testEnv.stkRex, testEnv);
   });
 
   describe('Testing delegateTokensBySig function', () => {
     it('should revert with INCONSISTENT_PARAMS_LENGTH if length of tokens is different than params', async () => {
       const {
         govHelper,
-        aave,
+        rex,
         users: [user1],
       } = testEnv;
       await expect(
-        govHelper.connect(user1.signer).delegateTokensBySig([aave.address], [])
+        govHelper.connect(user1.signer).delegateTokensBySig([rex.address], [])
       ).to.revertedWith('INCONSISTENT_PARAMS_LENGTH');
     });
-    it('should delegate both VOTING and PROPOSITION power from both AAVE and stkAAVE', async () => {
-      const { chainId } = await DRE.ethers.provider.getNetwork();
+    it('should delegate both VOTING and PROPOSITION power from both REX and stkREX', async () => {
+      const {chainId} = await DRE.ethers.provider.getNetwork();
       const {
         govHelper,
-        aave,
-        stkAave,
+        rex,
+        stkRex,
         users: [user1, user2],
       } = testEnv;
       const user1PrivateKey = require('../test-wallets.js').accounts[2].secretKey;
 
-      // building aave signature
-      const aaveNonce = (await aave.connect(user1.signer)._nonces(user1.address)).toString();
-      const aaveTypedData = buildDelegateParams(
+      // building rex signature
+      const rexNonce = (await rex.connect(user1.signer)._nonces(user1.address)).toString();
+      const rexTypedData = buildDelegateParams(
         chainId,
-        aave.address,
-        await aave.connect(user1.signer).name(),
+        rex.address,
+        await rex.connect(user1.signer).name(),
         user2.address,
-        aaveNonce,
+        rexNonce,
         expiry
       );
-      const { v, r, s } = getSignatureFromTypedData(user1PrivateKey, aaveTypedData);
-      const aaveParams = {
+      const {v, r, s} = getSignatureFromTypedData(user1PrivateKey, rexTypedData);
+      const rexParams = {
         delegatee: user2.address,
-        nonce: aaveNonce,
+        nonce: rexNonce,
         expiry,
         v,
         r,
         s,
       };
 
-      // building stkAave signature
-      const stkAaveNonce = (await stkAave.connect(user1.signer)._nonces(user1.address)).toString();
-      const stkAaveTypedData = buildDelegateParams(
+      // building stkRex signature
+      const stkRexNonce = (await stkRex.connect(user1.signer)._nonces(user1.address)).toString();
+      const stkRexTypedData = buildDelegateParams(
         chainId,
-        stkAave.address,
-        await stkAave.connect(user1.signer).name(),
+        stkRex.address,
+        await stkRex.connect(user1.signer).name(),
         user2.address,
-        stkAaveNonce,
+        stkRexNonce,
         expiry
       );
-      const { v: v1, r: r1, s: s1 } = getSignatureFromTypedData(user1PrivateKey, stkAaveTypedData);
-      const stkAaveParams = {
+      const {v: v1, r: r1, s: s1} = getSignatureFromTypedData(user1PrivateKey, stkRexTypedData);
+      const stkRexParams = {
         delegatee: user2.address,
-        nonce: stkAaveNonce,
+        nonce: stkRexNonce,
         expiry,
         v: v1,
         r: r1,
@@ -97,27 +97,27 @@ makeSuite('Aave Governance V2 Helpers tests', deployGovernance, (testEnv: TestEn
 
       const user2Powers = await calculateUserTotalPowers(
         user2,
-        [aave.address, stkAave.address],
+        [rex.address, stkRex.address],
         testEnv
       );
 
       expect(
         await govHelper
           .connect(user1.signer)
-          .delegateTokensBySig([aave.address, stkAave.address], [aaveParams, stkAaveParams])
+          .delegateTokensBySig([rex.address, stkRex.address], [rexParams, stkRexParams])
       );
 
       const user2NewPowers = await calculateUserTotalPowers(
         user2,
-        [aave.address, stkAave.address],
+        [rex.address, stkRex.address],
         testEnv
       );
 
       expect(user2NewPowers.propositionPower).to.eq(
-        user2Powers.propositionPower.add(USER1_AAVE_BALANCE).add(USER1_STKAAVE_BALANCE)
+        user2Powers.propositionPower.add(USER1_REX_BALANCE).add(USER1_STKREX_BALANCE)
       );
       expect(user2NewPowers.votingPower).to.eq(
-        user2Powers.votingPower.add(USER1_AAVE_BALANCE).add(USER1_STKAAVE_BALANCE)
+        user2Powers.votingPower.add(USER1_REX_BALANCE).add(USER1_STKREX_BALANCE)
       );
     });
   });
@@ -126,63 +126,63 @@ makeSuite('Aave Governance V2 Helpers tests', deployGovernance, (testEnv: TestEn
     it('should revert with INCONSISTENT_PARAMS_LENGTH if length of tokens is different than params', async () => {
       const {
         govHelper,
-        aave,
+        rex,
         users: [user1],
       } = testEnv;
       await expect(
-        govHelper.connect(user1.signer).delegateTokensByTypeBySig([aave.address], [])
+        govHelper.connect(user1.signer).delegateTokensByTypeBySig([rex.address], [])
       ).to.revertedWith('INCONSISTENT_PARAMS_LENGTH');
     });
-    it('should delegate VOTING power from both AAVE and stkAAVE', async () => {
-      const { chainId } = await DRE.ethers.provider.getNetwork();
+    it('should delegate VOTING power from both REX and stkREX', async () => {
+      const {chainId} = await DRE.ethers.provider.getNetwork();
       const {
         govHelper,
-        aave,
-        stkAave,
+        rex,
+        stkRex,
         users: [user1, user2],
       } = testEnv;
       const user1PrivateKey = require('../test-wallets.js').accounts[2].secretKey;
 
       const powerType = DelegationType.VOTING_POWER;
 
-      // building aave signature
-      const aaveNonce = (await aave.connect(user1.signer)._nonces(user1.address)).toString();
-      const aaveTypedData = buildDelegateByTypeParams(
+      // building rex signature
+      const rexNonce = (await rex.connect(user1.signer)._nonces(user1.address)).toString();
+      const rexTypedData = buildDelegateByTypeParams(
         chainId,
-        aave.address,
-        await aave.connect(user1.signer).name(),
+        rex.address,
+        await rex.connect(user1.signer).name(),
         user2.address,
         powerType.toString(),
-        aaveNonce,
+        rexNonce,
         expiry
       );
-      const { v, r, s } = getSignatureFromTypedData(user1PrivateKey, aaveTypedData);
-      const aaveParams = {
+      const {v, r, s} = getSignatureFromTypedData(user1PrivateKey, rexTypedData);
+      const rexParams = {
         delegatee: user2.address,
         delegationType: powerType,
-        nonce: aaveNonce,
+        nonce: rexNonce,
         expiry,
         v,
         r,
         s,
       };
 
-      // building stkAave signature
-      const stkAaveNonce = (await stkAave.connect(user1.signer)._nonces(user1.address)).toString();
-      const stkAaveTypedData = buildDelegateByTypeParams(
+      // building stkRex signature
+      const stkRexNonce = (await stkRex.connect(user1.signer)._nonces(user1.address)).toString();
+      const stkRexTypedData = buildDelegateByTypeParams(
         chainId,
-        stkAave.address,
-        await stkAave.connect(user1.signer).name(),
+        stkRex.address,
+        await stkRex.connect(user1.signer).name(),
         user2.address,
         powerType.toString(),
-        stkAaveNonce,
+        stkRexNonce,
         expiry
       );
-      const { v: v1, r: r1, s: s1 } = getSignatureFromTypedData(user1PrivateKey, stkAaveTypedData);
-      const stkAaveParams = {
+      const {v: v1, r: r1, s: s1} = getSignatureFromTypedData(user1PrivateKey, stkRexTypedData);
+      const stkRexParams = {
         delegatee: user2.address,
         delegationType: powerType,
-        nonce: stkAaveNonce,
+        nonce: stkRexNonce,
         expiry,
         v: v1,
         r: r1,
@@ -190,79 +190,79 @@ makeSuite('Aave Governance V2 Helpers tests', deployGovernance, (testEnv: TestEn
       };
       const user2Powers = await calculateUserTotalPowers(
         user2,
-        [aave.address, stkAave.address],
+        [rex.address, stkRex.address],
         testEnv
       );
 
       expect(
         await govHelper
           .connect(user1.signer)
-          .delegateTokensByTypeBySig([aave.address, stkAave.address], [aaveParams, stkAaveParams])
+          .delegateTokensByTypeBySig([rex.address, stkRex.address], [rexParams, stkRexParams])
       );
 
       const user2NewPowers = await calculateUserTotalPowers(
         user2,
-        [aave.address, stkAave.address],
+        [rex.address, stkRex.address],
         testEnv
       );
 
       expect(user2NewPowers.propositionPower).to.eq(user2Powers.propositionPower);
       expect(user2NewPowers.votingPower).to.eq(
-        user2Powers.votingPower.add(USER1_AAVE_BALANCE).add(USER1_STKAAVE_BALANCE)
+        user2Powers.votingPower.add(USER1_REX_BALANCE).add(USER1_STKREX_BALANCE)
       );
     });
 
-    it('should delegate PROPOSITION power from both AAVE and stkAAVE', async () => {
-      const { chainId } = await DRE.ethers.provider.getNetwork();
+    it('should delegate PROPOSITION power from both REX and stkREX', async () => {
+      const {chainId} = await DRE.ethers.provider.getNetwork();
       const {
         govHelper,
-        aave,
-        stkAave,
+        rex,
+        stkRex,
         users: [user1, user2],
       } = testEnv;
       const user1PrivateKey = require('../test-wallets.js').accounts[2].secretKey;
 
       const powerType = DelegationType.PROPOSITION_POWER;
 
-      // building aave signature
-      const aaveNonce = (await aave.connect(user1.signer)._nonces(user1.address)).toString();
-      const aaveTypedData = buildDelegateByTypeParams(
+      // building rex signature
+      const rexNonce = (await rex.connect(user1.signer)._nonces(user1.address)).toString();
+      const rexTypedData = buildDelegateByTypeParams(
         chainId,
-        aave.address,
-        await aave.connect(user1.signer).name(),
+        rex.address,
+        await rex.connect(user1.signer).name(),
         user2.address,
         powerType.toString(),
-        aaveNonce,
+        rexNonce,
         expiry
       );
-      const { v, r, s } = getSignatureFromTypedData(user1PrivateKey, aaveTypedData);
-      const aaveParams = {
+      const {v, r, s} = getSignatureFromTypedData(user1PrivateKey, rexTypedData);
+      const rexParams = {
         delegatee: user2.address,
         delegationType: powerType,
-        nonce: aaveNonce,
+        nonce: rexNonce,
         expiry,
         v,
         r,
         s,
       };
 
-      // building stkAave signature
+      // building stkRex signature
 
-      const stkAaveNonce = (await stkAave.connect(user1.signer)._nonces(user1.address)).toString();
-      const stkAaveTypedData = buildDelegateByTypeParams(
+      const stkRexNonce = (await stkRex.connect(user1.signer)._nonces(user1.address)).toString();
+      const stkRexTypedData = buildDelegateByTypeParams(
         chainId,
-        stkAave.address,
-        await stkAave.connect(user1.signer).name(),
+        stkRex.address,
+        await stkRex.connect(user1.signer).name(),
         user2.address,
         powerType.toString(),
-        stkAaveNonce,
+        stkRexNonce,
         expiry
       );
-      const { v: v1, r: r1, s: s1 } = getSignatureFromTypedData(user1PrivateKey, stkAaveTypedData);
-      const stkAaveParams = {
+      const {v: v1, r: r1, s: s1} = getSignatureFromTypedData(user1PrivateKey, stkRexTypedData);
+      const stkRexParams = {
         delegatee: user2.address,
         delegationType: powerType,
-        nonce: stkAaveNonce,
+        nonce: stkRexNonce,
         expiry,
         v: v1,
         r: r1,
@@ -271,25 +271,25 @@ makeSuite('Aave Governance V2 Helpers tests', deployGovernance, (testEnv: TestEn
 
       const user2Powers = await calculateUserTotalPowers(
         user2,
-        [aave.address, stkAave.address],
+        [rex.address, stkRex.address],
         testEnv
       );
 
       expect(
         await govHelper
           .connect(user1.signer)
-          .delegateTokensByTypeBySig([aave.address, stkAave.address], [aaveParams, stkAaveParams])
+          .delegateTokensByTypeBySig([rex.address, stkRex.address], [rexParams, stkRexParams])
       );
 
       const user2NewPowers = await calculateUserTotalPowers(
         user2,
-        [aave.address, stkAave.address],
+        [rex.address, stkRex.address],
         testEnv
       );
 
       expect(user2NewPowers.votingPower).to.eq(user2Powers.votingPower);
       expect(user2NewPowers.propositionPower).to.eq(
-        user2Powers.propositionPower.add(USER1_AAVE_BALANCE).add(USER1_STKAAVE_BALANCE)
+        user2Powers.propositionPower.add(USER1_REX_BALANCE).add(USER1_STKREX_BALANCE)
       );
     });
   });

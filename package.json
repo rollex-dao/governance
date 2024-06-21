@@ -1,7 +1,7 @@
 {
-  "name": "@aave/governance-v2",
-  "version": "1.0.0",
-  "description": "Pegasys Governance v2 smart contracts",
+  "name": "@pollum-io/rollex-governance",
+  "version": "0.0.1",
+  "description": "Rollex Governance smart contracts",
   "files": [
     "contracts",
     "artifacts"
@@ -22,7 +22,8 @@
     "prepublishOnly": "npm run compile"
   },
   "dependencies": {
-    "@aave/aave-token": "^1.0.4"
+    "@aave/aave-token": "^1.0.4",
+    "@pollum-io/rollex-token": "^0.0.1"
   },
   "devDependencies": {
     "@nomiclabs/buidler-waffle": "2.0.0",

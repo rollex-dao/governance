@@ -4,9 +4,9 @@ import {deployGovernanceStrategy} from '../../helpers/contracts-deployments';
 
 task(`deploy:strategy`, `Deploy governance for tests and development purposes`)
   .addFlag('verify')
-  .addParam('aave', '', ZERO_ADDRESS)
-  .addParam('stkAave', '', ZERO_ADDRESS)
-  .setAction(async ({aave, stkAave, verify}, _DRE) => {
+  .addParam('rex', '', ZERO_ADDRESS)
+  .addParam('stkRex', '', ZERO_ADDRESS)
+  .setAction(async ({rex, stkRex, verify}, _DRE) => {
     _DRE.run('set-DRE');
-    return await deployGovernanceStrategy(aave, stkAave, verify);
+    return await deployGovernanceStrategy(rex, stkRex, verify);
   });

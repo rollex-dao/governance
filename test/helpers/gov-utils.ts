@@ -5,26 +5,26 @@ import {expect, use} from 'chai';
 import {Test} from 'mocha';
 import {getFirstSigner} from '../../helpers/contracts-getters';
 import {SelfdestructTransferFactory} from '../../types';
-import {AaveTokenV2} from '../../types/AaveTokenV2';
+import {RexTokenV2} from '../../types/RexTokenV2';
 import {tEthereumAddress} from '../../helpers/types';
 
 export const emptyBalances = async (users: SignerWithAddress[], testEnv: TestEnv) => {
   for (let i = 0; i < users.length; i++) {
-    const balanceBefore = await testEnv.aave.connect(users[i].signer).balanceOf(users[i].address);
+    const balanceBefore = await testEnv.rex.connect(users[i].signer).balanceOf(users[i].address);
     await (
-      await testEnv.aave.connect(users[i].signer).transfer(testEnv.minter.address, balanceBefore)
+      await testEnv.rex.connect(users[i].signer).transfer(testEnv.minter.address, balanceBefore)
     ).wait();
   }
 };
 
 export const setBalance = async (user: SignerWithAddress, amount: BigNumber, testEnv: TestEnv) => {
-  await setTokenBalance(user, amount, testEnv.aave, testEnv);
+  await setTokenBalance(user, amount, testEnv.rex, testEnv);
 };
 
 export const setTokenBalance = async (
   user: SignerWithAddress,
   amount: BigNumber,
-  token: AaveTokenV2,
+  token: RexTokenV2,
   testEnv: TestEnv
 ) => {
   // emptying

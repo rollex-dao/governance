@@ -15,22 +15,22 @@ task(`migrate:dev`, `Deploy governance for tests and development purposes`)
     const [adminSigner, tokenMinterSigner] = await _DRE.ethers.getSigners();
     const admin = await adminSigner.getAddress();
     const tokenMinter = await tokenMinterSigner.getAddress();
-    // Deploy mocked AAVE v2
-    const token = await DRE.run('deploy:mocked-aave', {
+    // Deploy mocked REX v2
+    const token = await DRE.run('deploy:mocked-rex', {
       minter: tokenMinter,
       verify,
     });
 
-    // Deploy mocked AAVE v2
-    const stkToken = await DRE.run('deploy:mocked-stk-aave', {
+    // Deploy mocked REX v2
+    const stkToken = await DRE.run('deploy:mocked-stk-rex', {
       minter: tokenMinter,
       verify,
     });
 
     // Deploy strategy
     const strategy = await DRE.run('deploy:strategy', {
-      aave: token.address,
-      stkAave: stkToken.address,
+      rex: token.address,
+      stkRex: stkToken.address,
     });
 
     // Deploy governance v2

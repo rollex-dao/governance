@@ -13,27 +13,27 @@ export enum EthereumNetworkNames {
   main = 'main',
 }
 
-export enum AavePools {
+export enum RexPools {
   proto = 'proto',
   secondary = 'secondary',
 }
 
 export enum eContractid {
-  AaveGovernanceV2 = 'AaveGovernanceV2',
+  RexGovernanceV2 = 'RexGovernanceV2',
   GovernanceStrategy = 'GovernanceStrategy',
   Executor = 'Executor',
   InitializableAdminUpgradeabilityProxy = 'InitializableAdminUpgradeabilityProxy',
-  AaveTokenV2Mock = 'AaveTokenV2Mock',
-  AaveTokenV2MockImpl = 'AaveTokenV2MockImpl',
-  AaveTokenV1MockImpl = 'AaveTokenV1MockImpl',
-  AaveTokenV2 = 'AaveTokenV2',
-  AaveTokenV1Mock = 'AaveTokenV1Mock',
+  RexTokenV2Mock = 'RexTokenV2Mock',
+  RexTokenV2MockImpl = 'RexTokenV2MockImpl',
+  RexTokenV1MockImpl = 'RexTokenV1MockImpl',
+  RexTokenV2 = 'RexTokenV2',
+  RexTokenV1Mock = 'RexTokenV1Mock',
   ExecutorMock = 'ExecutorMock',
-  StkAaveTokenV2Mock = 'StkAaveTokenV2Mock',
-  StkAaveTokenV2 = 'StkAaveTokenV2',
-  StkAaveTokenV2MockImpl = 'StkAaveTokenV2MockImpl',
-  StkAaveTokenV1Mock = 'StkAaveTokenV1Mock',
-  StkAaveTokenV1MockImpl = 'StkAaveTokenV1MockImpl',
+  StkRexTokenV2Mock = 'StkRexTokenV2Mock',
+  StkRexTokenV2 = 'StkRexTokenV2',
+  StkRexTokenV2MockImpl = 'StkRexTokenV2MockImpl',
+  StkRexTokenV1Mock = 'StkRexTokenV1Mock',
+  StkRexTokenV1MockImpl = 'StkRexTokenV1MockImpl',
   GovernanceV2Helper = 'GovernanceV2Helper',
 }
 

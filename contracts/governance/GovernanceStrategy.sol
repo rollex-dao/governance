@@ -9,42 +9,42 @@ import {IGovernancePowerDelegationToken} from '../interfaces/IGovernancePowerDel
 /**
  * @title Governance Strategy contract
  * @dev Smart contract containing logic to measure users' relative power to propose and vote.
- * User Power = User Power from Aave Token + User Power from stkAave Token.
+ * User Power = User Power from Rex Token + User Power from stkRex Token.
  * User Power from Token = Token Power + Token Power as Delegatee [- Token Power if user has delegated]
- * Two wrapper functions linked to Aave Tokens's GovernancePowerDelegationERC20.sol implementation
+ * Two wrapper functions linked to Rex Tokens's GovernancePowerDelegationERC20.sol implementation
  * - getPropositionPowerAt: fetching a user Proposition Power at a specified block
  * - getVotingPowerAt: fetching a user Voting Power at a specified block
- * @author Aave
+ * @author Rex
  **/
 contract GovernanceStrategy is IGovernanceStrategy {
-  address public immutable AAVE;
-  address public immutable STK_AAVE;
+  address public immutable REX;
+  address public immutable STK_REX;
 
   /**
    * @dev Constructor, register tokens used for Voting and Proposition Powers.
-   * @param aave The address of the AAVE Token contract.
-   * @param stkAave The address of the stkAAVE Token Contract
+   * @param rex The address of the REX Token contract.
+   * @param stkRex The address of the stkREX Token Contract
    **/
-  constructor(address aave, address stkAave) {
-    AAVE = aave;
-    STK_AAVE = stkAave;
+  constructor(address rex, address stkRex) {
+    REX = rex;
+    STK_REX = stkRex;
   }
 
   /**
    * @dev Returns the total supply of Proposition Tokens Available for Governance
-   * = AAVE Available for governance      + stkAAVE available
-   * The supply of AAVE staked in stkAAVE are not taken into account so:
-   * = (Supply of AAVE - AAVE in stkAAVE) + (Supply of stkAAVE)
-   * = Supply of AAVE, Since the supply of stkAAVE is equal to the number of AAVE staked
+   * = REX Available for governance      + stkREX available
+   * The supply of REX staked in stkREX are not taken into account so:
+   * = (Supply of REX - REX in stkREX) + (Supply of stkREX)
+   * = Supply of REX, Since the supply of stkREX is equal to the number of REX staked
    * @param blockNumber Blocknumber at which to evaluate
    * @return total supply at blockNumber
    **/
   function getTotalPropositionSupplyAt(uint256 blockNumber) public view override returns (uint256) {
-    return IERC20(AAVE).totalSupplyAt(blockNumber);
+    return IERC20(REX).totalSupplyAt(blockNumber);
   }
 
   /**
-   * @dev Returns the total supply of Outstanding Voting Tokens 
+   * @dev Returns the total supply of Outstanding Voting Tokens
    * @param blockNumber Blocknumber at which to evaluate
    * @return total supply at blockNumber
    **/
@@ -65,7 +65,11 @@ contract GovernanceStrategy is IGovernanceStrategy {
     returns (uint256)
   {
     return
-      _getPowerByTypeAt(user, blockNumber, IGovernancePowerDelegationToken.DelegationType.PROPOSITION_POWER);
+      _getPowerByTypeAt(
+        user,
+        blockNumber,
+        IGovernancePowerDelegationToken.DelegationType.PROPOSITION_POWER
+      );
   }
 
   /**
@@ -80,7 +84,12 @@ contract GovernanceStrategy is IGovernanceStrategy {
     override
     returns (uint256)
   {
-    return _getPowerByTypeAt(user, blockNumber, IGovernancePowerDelegationToken.DelegationType.VOTING_POWER);
+    return
+      _getPowerByTypeAt(
+        user,
+        blockNumber,
+        IGovernancePowerDelegationToken.DelegationType.VOTING_POWER
+      );
   }
 
   function _getPowerByTypeAt(
@@ -89,7 +98,7 @@ contract GovernanceStrategy is IGovernanceStrategy {
     IGovernancePowerDelegationToken.DelegationType powerType
   ) internal view returns (uint256) {
     return
-      IGovernancePowerDelegationToken(AAVE).getPowerAtBlock(user, blockNumber, powerType) +
-      IGovernancePowerDelegationToken(STK_AAVE).getPowerAtBlock(user, blockNumber, powerType);
+      IGovernancePowerDelegationToken(REX).getPowerAtBlock(user, blockNumber, powerType) +
+      IGovernancePowerDelegationToken(STK_REX).getPowerAtBlock(user, blockNumber, powerType);
   }
 }

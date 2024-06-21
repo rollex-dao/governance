@@ -1,8 +1,8 @@
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-[![Build pass](https://github.com/aave/governance-v2/actions/workflows/node.js.yml/badge.svg)](https://github.com/aave/governance-v2/actions/workflows/node.js.yml)
-[![codecov](https://codecov.io/gh/aave/governance-v2/branch/master/graph/badge.svg?token=cYYgmBJQcO)](https://codecov.io/gh/aave/governance-v2)
+[![Build pass](https://github.com/rex/governance-v2/actions/workflows/node.js.yml/badge.svg)](https://github.com/rex/governance-v2/actions/workflows/node.js.yml)
+[![codecov](https://codecov.io/gh/rex/governance-v2/branch/master/graph/badge.svg?token=cYYgmBJQcO)](https://codecov.io/gh/rex/governance-v2)
 
-# Aave Governance v2
+# Rollex Governance
 
 ## Architecture
 
@@ -10,22 +10,22 @@
 
 ## Audits
 
-The Aave Governance V2 has been audited by Peckshied, with the final report [here](./audits/PeckShield-Audit-AaveGovernance2-final.pdf)
+The Rex Governance V2 has been audited by Peckshied, with the final report [here](./audits/PeckShield-Audit-RexGovernance2-final.pdf)
 
 ## Planned configurations for mainnet
 
-### AaveGovernanceV2
+### RexGovernance
 
 - voting delay: 7200 blocks (using 12s per block = 1 day) between proposal creation and proposal voting
-- guardian: Aave Guardian multisig
+- guardian: Rex Guardian multisig
 - executors whitelisted: Executor (short) and Executor (long)
 - owner (entity able to change the strategy, voting delay and authorize/unauthorize executors): Executor 2, the long timelock
 
 ### Executor (short)
 
-It will control the whole Aave protocol v1, the token distributor used in v1, the contract collecting the fees of v1, the Reserve Ecosystem of AAVE and any change in this timelock itself
+It will control the whole Rex protocol v1, the token distributor used in v1, the contract collecting the fees of v1, the Reserve Ecosystem of REX and any change in this timelock itself
 
-- admin (the only address enable to interact with this executor): Aave Governance v2
+- admin (the only address enable to interact with this executor): Rex Governance v2
 - delay (time between a proposals passes and its actions get executed): 1 day
 - grace period (time after the delay during which the proposal can be executed): 5 days
 - proposition threshold: 0.5%
@@ -35,11 +35,12 @@ It will control the whole Aave protocol v1, the token distributor used in v1, th
 
 ### Executor (long)
 
-It will control the upgradeability of the AAVE token, the stkAAVE, any change in the parameters of the Governance v2 and any change in the parameters of this timelock itself
+It will control the upgradeability of the REX token, the stkREX, any change in the parameters of the Governance v2 and any change in the parameters of this timelock itself
 
-Current configuration (voted on [Proposal 106](https://app.aave.com/governance/proposal/106/)):
-Code, tests and deployement scripts can be found [here](https://github.com/bgd-labs/aave-gov-level-2-update).
-- admin: Aave Governance v2
+Current configuration (voted on [Proposal 106](https://app.rex.com/governance/proposal/106/)):
+Code, tests and deployement scripts can be found [here](https://github.com/bgd-labs/rex-gov-level-2-update).
+
+- admin: Rex Governance v2
 - delay: 7 days
 - grace period: 5 days
 - proposition threshold: 1.25%
@@ -48,7 +49,8 @@ Code, tests and deployement scripts can be found [here](https://github.com/bgd-l
 - quorum: 6.5%
 
 Deprecated configuration:
-- admin: Aave Governance v2
+
+- admin: Rex Governance v2
 - delay: 7 days
 - grace period: 5 days
 - proposition threshold: 2%
@@ -58,25 +60,25 @@ Deprecated configuration:
 
 ### Governance strategy (the contract determining how the voting/proposition powers are calculated)
 
-- Based on AAVE+stkAAVE
-- Voting and proposition power are: balanceOfAAVE + delegationReceivedOfAAVE + balanceOfstkAAVE + delegationReceivedOfstkAAVE (with delegation being voting or proposition depending on the case)
-- Total voting and proposition supply: AAVE supply
+- Based on REX+stkREX
+- Voting and proposition power are: balanceOfREX + delegationReceivedOfREX + balanceOfstkREX + delegationReceivedOfstkREX (with delegation being voting or proposition depending on the case)
+- Total voting and proposition supply: REX supply
 
 ## Getting Started
 
-You can install `@aave/governance-v2` as an NPM package in your Hardhat, Buidler or Truffle project to import the contracts and interfaces:
+You can install `@pollum-io/rollex-governace` as an NPM package in your Hardhat, Buidler or Truffle project to import the contracts and interfaces:
 
-`npm install @aave/governance-v2`
+`npm install @pollum-io/rollex-governace`
 
 Import at Solidity files:
 
 ```
-import {IAaveGovernanceV2} from "@aave/governance-v2/contracts/interfaces/IAaveGovernanceV2.sol";
+import {IRexGovernanceV2} from "@pollum-io/rollex-governace/contracts/interfaces/IRexGovernanceV2.sol";
 
 contract Misc {
 
   function vote(uint256 proposal, bool support) {
-    IAaveGovernanceV2(pool).submitVote(proposal, support);
+    IRexGovernanceV2(pool).submitVote(proposal, support);
     {...}
   }
 }
@@ -87,7 +89,7 @@ The JSON artifacts with the ABI and Bytecode are also included into the bundled 
 Import JSON file via Node JS `require`:
 
 ```
-const GovernanceV2Artifact = require('@aave/governance-v2/artifacts/contracts/governance/AaveGovernanceV2.sol/AaveGovernanceV2.json');
+const GovernanceV2Artifact = require('@pollum-io/rollex-governace/artifacts/contracts/governance/RexGovernanceV2.sol/RexGovernanceV2.json');
 
 // Log the ABI into console
 console.log(GovernanceV2Artifact.abi)

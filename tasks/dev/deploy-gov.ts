@@ -1,6 +1,6 @@
 import {task} from 'hardhat/config';
 import {ZERO_ADDRESS} from '../../helpers/constants';
-import {deployAaveGovernanceV2} from '../../helpers/contracts-deployments';
+import {deployRexGovernanceV2} from '../../helpers/contracts-deployments';
 
 task(`deploy:gov`, `Deploy governance for tests and development purposes`)
   .addFlag('verify')
@@ -9,5 +9,5 @@ task(`deploy:gov`, `Deploy governance for tests and development purposes`)
   .addParam('guardian', '', ZERO_ADDRESS)
   .setAction(async ({strategy, votingDelay, guardian}, _DRE) => {
     _DRE.run('set-DRE');
-    return await deployAaveGovernanceV2(strategy, votingDelay, guardian, []);
+    return await deployRexGovernanceV2(strategy, votingDelay, guardian, []);
   });

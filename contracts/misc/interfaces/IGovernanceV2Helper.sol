@@ -2,7 +2,7 @@
 pragma solidity 0.7.5;
 pragma abicoder v2;
 
-import {IAaveGovernanceV2} from '../../interfaces/IAaveGovernanceV2.sol';
+import {IRexGovernanceV2} from '../../interfaces/IRexGovernanceV2.sol';
 import {IExecutorWithTimelock} from '../../interfaces/IExecutorWithTimelock.sol';
 import {
   IGovernancePowerDelegationToken
@@ -32,7 +32,7 @@ interface IGovernanceV2Helper {
     bool canceled;
     address strategy;
     bytes32 ipfsHash;
-    IAaveGovernanceV2.ProposalState proposalState;
+    IRexGovernanceV2.ProposalState proposalState;
   }
 
   struct Power {
@@ -64,10 +64,10 @@ interface IGovernanceV2Helper {
   function getProposals(
     uint256 skip,
     uint256 limit,
-    IAaveGovernanceV2 governance
+    IRexGovernanceV2 governance
   ) external view virtual returns (ProposalStats[] memory proposalsStats);
 
-  function getProposal(uint256 id, IAaveGovernanceV2 governance)
+  function getProposal(uint256 id, IRexGovernanceV2 governance)
     external
     view
     virtual

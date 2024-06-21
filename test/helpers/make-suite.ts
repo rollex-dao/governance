@@ -6,16 +6,16 @@ import chai from 'chai';
 import {solidity} from 'ethereum-waffle';
 import {getEthersSigners} from '../../helpers/contracts-helpers';
 import {
-  getAaveGovernanceV2,
-  getAaveV2Mocked,
+  getRexGovernanceV2,
+  getRexV2Mocked,
   getExecutor,
   getGovernanceStrategy,
   getGovernanceV2Helper,
-  getStkAaveV2Mocked,
+  getStkRexV2Mocked,
 } from '../../helpers/contracts-getters';
 import {tEthereumAddress} from '../../helpers/types';
-import {AaveGovernanceV2} from '../../types/AaveGovernanceV2';
-import {AaveTokenV2} from '../../types/AaveTokenV2';
+import {RexGovernanceV2} from '../../types/RexGovernanceV2';
+import {RexTokenV2} from '../../types/RexTokenV2';
 import {Executor} from '../../types/Executor';
 import {GovernanceStrategy} from '../../types/GovernanceStrategy';
 import {GovernanceV2Helper} from '../../types/GovernanceV2Helper';
@@ -30,9 +30,9 @@ export interface TestEnv {
   deployer: SignerWithAddress;
   minter: SignerWithAddress;
   users: SignerWithAddress[];
-  aave: AaveTokenV2;
-  stkAave: AaveTokenV2; // TODO change to a mock of stkAAVE
-  gov: AaveGovernanceV2;
+  rex: RexTokenV2;
+  stkRex: RexTokenV2; // TODO change to a mock of stkREX
+  gov: RexGovernanceV2;
   strategy: GovernanceStrategy;
   executor: Executor;
   govHelper: GovernanceV2Helper;
@@ -47,9 +47,9 @@ const testEnv: TestEnv = {
   deployer: {} as SignerWithAddress,
   minter: {} as SignerWithAddress,
   users: [] as SignerWithAddress[],
-  aave: {} as AaveTokenV2,
-  stkAave: {} as AaveTokenV2,
-  gov: {} as AaveGovernanceV2,
+  rex: {} as RexTokenV2,
+  stkRex: {} as RexTokenV2,
+  gov: {} as RexGovernanceV2,
   strategy: {} as GovernanceStrategy,
   govHelper: {} as GovernanceV2Helper,
   executor: {} as Executor,
@@ -75,9 +75,9 @@ export async function initializeMakeSuite() {
 
   testEnv.deployer = deployer;
   testEnv.minter = minter;
-  testEnv.aave = await getAaveV2Mocked();
-  testEnv.stkAave = await getStkAaveV2Mocked();
-  testEnv.gov = await getAaveGovernanceV2();
+  testEnv.rex = await getRexV2Mocked();
+  testEnv.stkRex = await getStkRexV2Mocked();
+  testEnv.gov = await getRexGovernanceV2();
   testEnv.strategy = await getGovernanceStrategy();
   testEnv.executor = await getExecutor();
   testEnv.govHelper = await getGovernanceV2Helper();
