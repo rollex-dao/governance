@@ -1,6 +1,6 @@
 {
   "name": "@pollum-io/rollex-governance",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Rollex Governance smart contracts",
   "files": [
     "contracts",
@@ -22,7 +22,6 @@
     "prepublishOnly": "npm run compile"
   },
   "dependencies": {
-    "@aave/aave-token": "^1.0.4",
     "@pollum-io/rollex-token": "^0.0.1"
   },
   "devDependencies": {
