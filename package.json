@@ -1,6 +1,6 @@
 {
   "name": "@pollum-io/rollex-governance",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Rollex Governance smart contracts",
   "files": [
     "contracts",
@@ -9,6 +9,7 @@
   "scripts": {
     "run-env": "npm i && tail -f /dev/null",
     "hardhat": "hardhat",
+    "hardhat-main": "hardhat --network main",
     "compile": "SKIP_LOAD=true hardhat compile",
     "compile:force": "npm run compile -- --force",
     "compile:force:quiet": "npm run compile:force -- --quiet",
@@ -22,7 +23,8 @@
     "prepublishOnly": "npm run compile"
   },
   "dependencies": {
-    "@pollum-io/rollex-token": "^0.0.1"
+    "@pollum-io/rollex-token": "^0.0.1",
+    "@nomicfoundation/hardhat-verify": "^2.0.8"
   },
   "devDependencies": {
     "@nomiclabs/buidler-waffle": "2.0.0",

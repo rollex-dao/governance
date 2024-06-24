@@ -7,7 +7,7 @@ task(`deploy:gov`, `Deploy governance for tests and development purposes`)
   .addParam('strategy', '', ZERO_ADDRESS)
   .addParam('votingDelay', '', '15') // needed to be increase, evm_revert does not update block
   .addParam('guardian', '', ZERO_ADDRESS)
-  .setAction(async ({strategy, votingDelay, guardian}, _DRE) => {
+  .setAction(async ({strategy, votingDelay, guardian, verify}, _DRE) => {
     _DRE.run('set-DRE');
-    return await deployRexGovernanceV2(strategy, votingDelay, guardian, []);
+    return await deployRexGovernanceV2(strategy, votingDelay, guardian, [], verify);
   });
